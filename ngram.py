@@ -1,7 +1,9 @@
 import sys
 import pickle
 from keyseq_generator import keyseq
+from ntim import NtimData
 
+ntim_data = NtimData()
 ngrams = [{}]
 lines = []
 for line in sys.stdin:
@@ -24,8 +26,28 @@ for n in range(1, 5):
 				ngram[key][1] += 1
 			else:
 				ks = keyseq(key)
+				if not ks and key[0] != 's':
+					continue
 				ngram[key] = [ks, 1]
-	ngrams.append(ngram)
+	if n == 1:
+		ntim_data.unigram_sum = sum([
+			x[1] for x in ngram.values()
+		])
+	elif n == 2:
+		ntim_data.bigram_n1 = sum([
+			1 for i in ngram.values() if i[1] == 1
+		])
 
-with open('ngrams.pkl', 'wb') as file:
-	pickle.dump(ngrams, file)
+	if n >= 2:
+		ngram2 = {}
+		for (key, value) in ngram.items():
+			if value[1] > 1:
+				ngram2[key] = value
+		ngrams.append(ngram2)
+	else:
+		ngrams.append(ngram)
+
+ntim_data.ngrams = ngrams
+
+with open('ntim.pkl', 'wb') as file:
+	pickle.dump(ntim_data, file)

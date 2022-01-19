@@ -5,15 +5,15 @@ import itertools
 import var
 
 print("Loading files")
-with open("ngrams.pkl", "rb") as f:
-	ngrams = pickle.load(f)
-bigram_n1 = sum([1 for i in ngrams[2].values() if i[1] == 1 ])
-unigram_sum = sum([x[1] for x in ngrams[1].values()])
+with open("ntim.pkl", "rb") as f:
+	ntim_data = pickle.load(f)
+ngrams = ntim_data.ngrams
+bigram_n1 = ntim_data.bigram_n1
+unigram_sum = ntim_data.unigram_sum
 print(f"bigram n1: {bigram_n1}, unigram sum: {unigram_sum}")
 
 input_mapper = {}
 bad = 0; good = 0
-print("Generating input mapper")
 for ngram in ngrams:
 	for (key, value) in ngram.items():
 		for lat in value[0]:
@@ -21,8 +21,6 @@ for ngram in ngrams:
 				input_mapper[lat].append(key)
 			else:
 				input_mapper[lat] = [key]
-
-print(f"ready with g:{good} b:{bad}")
 
 def bigram_query(prefix: str, ch1: str) -> float:
 	dict1 = ngrams[2]
@@ -33,7 +31,7 @@ def bigram_query(prefix: str, ch1: str) -> float:
 	else:
 		c1 = dict1[str_all][1]
 		result = c1
-	#print(prefix, ch1, result)
+	print(prefix, ch1, result)
 	return result
 
 def get_candidates(input_buffer):
@@ -84,13 +82,13 @@ try:
 		print("connected from", address)
 		while True:
 			data = connection.recv(var.msg_len)
-			print("recv: ", data)
+			#print("recv: ", data)
 			if not data:
 				break
 			decoded = data.decode('utf-8').strip()
 			input_buffer, buffer = decoded.split(" ", 1)
 			candidates = get_candidates(input_buffer)
-			print("send: ", candidates)
+			#print("send: ", candidates)
 			connection.send(pickle.dumps(candidates))
 finally:
 	socket.close()

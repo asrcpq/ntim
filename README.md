@@ -15,12 +15,14 @@ ntim is based on server-client mode(deamon is needed to load dictionary to RAM)
 
 * [x] 1024 limit cut
 
-* [ ] more than 2 chars
+* [x] more than 2 chars
 
-* [ ] probabilistic spelling solver
+* [x] reduce dict size(2+)
 
-	* japanese key seq mapping
+* [ ] dict size limiter + fix probability
 
-	* chinese heteronym
+* [ ] IME occurrence probability(revise count)
 
-* [ ] IME occurrence probability
+* [ ] partial input buffer match
+
+* [ ] probabilistic spelling solver(heteronym)
