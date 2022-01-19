@@ -1,6 +1,7 @@
 # n-gram tiny input method(WIP)
 
-(Chinese/Japanese support only)
+(support zh-ziranma and ja-romaji natively,
+or you need to implement your own key sequence interpreter)
 
 ## training
 
@@ -9,9 +10,6 @@
 ## Run
 
 ntim is based on server-client mode(deamon is needed to load dictionary to RAM)
-
-ntim server need a key-sequence-to-component mapper dictionary file,
-it should be provided by `NTIM_MAPPER` environment variable.
 
 ## Todo
 

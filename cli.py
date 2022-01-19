@@ -81,7 +81,7 @@ def handle_input(ch) -> bool:
 			return True
 		return False
 
-	if ord('a') <= chint <= ord('z'):
+	if ord('a') <= chint <= ord('z') or chint == ord('-'):
 		if len(input_buffer) >= var.max_input_buffer:
 			return False
 		input_buffer += chr(chint)

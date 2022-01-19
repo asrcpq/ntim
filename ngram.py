@@ -1,11 +1,13 @@
 import sys
 import pickle
+from keyseq_generator import keyseq
 
 ngrams = [{}]
 lines = []
 for line in sys.stdin:
 	lines.append(line)
-for n in range(1, 3):
+
+for n in range(1, 5):
 	print(f"Processing {n}-gram")
 	ngram = {}
 
@@ -19,9 +21,10 @@ for n in range(1, 3):
 		for i in range(len(line) - n):
 			key = line[i:i+n]
 			if key in ngram:
-				ngram[key] += 1
+				ngram[key][1] += 1
 			else:
-				ngram[key] = 1
+				ks = keyseq(key)
+				ngram[key] = [ks, 1]
 	ngrams.append(ngram)
 
 with open('ngrams.pkl', 'wb') as file:
