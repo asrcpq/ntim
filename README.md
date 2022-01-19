@@ -1,4 +1,6 @@
-# n-gram tui input method(WIP)
+# n-gram tiny input method(WIP)
+
+(Chinese/Japanese support only)
 
 ## training
 
@@ -21,6 +23,6 @@ it should be provided by `NTIM_MAPPER` environment variable.
 
 	* japanese key seq mapping
 
-	* chinese duoyinzi
+	* chinese heteronym
 
 * [ ] IME occurrence probability

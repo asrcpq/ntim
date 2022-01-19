@@ -36,7 +36,7 @@ def handle_input(ch) -> bool:
 
 	if chint == -1 or chint == 3:
 		sys.exit()
-	if chint == 263 or chint == 8: # curses is shit
+	if chint == curses.KEY_BACKSPACE or chint == 8: # bs or ctrl-h
 		if len(input_buffer) > 0:
 			input_buffer = input_buffer[:-1]
 			return True
@@ -48,10 +48,10 @@ def handle_input(ch) -> bool:
 		sys.exit()
 
 	flag = True
-	if chint == 6:
+	if chint == 6 or chint == curses.KEY_NPAGE:
 		if page_offset + wpp < len(candidates):
 			page_offset += wpp
-	elif chint == 2:
+	elif chint == 2 or chint == curses.KEY_PPAGE:
 		if page_offset >= wpp:
 			page_offset -= wpp
 	else:
