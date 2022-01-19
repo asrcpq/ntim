@@ -2,6 +2,7 @@ import os
 import socket
 import pickle
 import itertools
+import var
 
 print("Loading files")
 with open("ngrams.pkl", "rb") as f:
@@ -91,7 +92,14 @@ def get_candidates(input_buffer):
 		key = lambda tup: tup[1],
 		reverse = True,
 	)]
-	return candidates_sorted
+	candidates = []
+	total_len = 0
+	for candidate in candidates_sorted:
+		total_len += len(candidate)
+		if total_len >= var.candidate_len:
+			break
+		candidates.append(candidate)
+	return candidates
 
 socket = socket.socket(socket.AF_UNIX,  socket.SOCK_STREAM)
 socket_path = "ntim.socket"
@@ -102,7 +110,7 @@ try:
 		connection, address = socket.accept()
 		print("connected from", address)
 		while True:
-			data = connection.recv(1024)
+			data = connection.recv(var.msg_len)
 			print("recv: ", data)
 			if not data:
 				break

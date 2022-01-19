@@ -4,6 +4,7 @@ import atexit
 import signal
 import socket
 import pickle
+import var
 
 def handle_exit(*args):
 	curses.nocbreak()
@@ -31,6 +32,7 @@ def handle_input(ch) -> bool:
 	global input_buffer
 	global buffer
 	global candidates
+	global page_offset
 
 	if chint == -1 or chint == 3:
 		sys.exit()
@@ -56,8 +58,6 @@ def handle_input(ch) -> bool:
 		flag = False
 	if flag:
 		return False
-	else:
-		page_offset = 0
 
 	flag = True
 	if chint == ord('0'):
@@ -68,6 +68,7 @@ def handle_input(ch) -> bool:
 		idx = page_offset
 	elif chint == 10:
 		buffer += input_buffer
+		buffer = buffer[:var.max_buffer]
 		input_buffer = ""
 		return False
 	else:
@@ -75,11 +76,14 @@ def handle_input(ch) -> bool:
 	if flag:
 		if idx < len(candidates):
 			buffer += candidates[idx]
+			buffer = buffer[:var.max_buffer]
 			input_buffer = ""
-			candidates = []
+			return True
 		return False
 
 	if ord('a') <= chint <= ord('z'):
+		if len(input_buffer) >= var.max_input_buffer:
+			return False
 		input_buffer += chr(chint)
 		return True
 
@@ -93,10 +97,11 @@ with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as socket:
 		recompute_flag = handle_input(chint)
 
 		if recompute_flag:
+			page_offset = 0
 			if input_buffer:
 				encoded = bytes(f"{input_buffer} s{buffer}", "utf-8")
 				socket.sendall(encoded)
-				candidates = pickle.loads(socket.recv(1024))
+				candidates = pickle.loads(socket.recv(var.msg_len))
 			else:
 				candidates = []
 	

@@ -13,12 +13,14 @@ it should be provided by `NTIM_MAPPER` environment variable.
 
 ## Todo
 
-* 1024 limit cut
+* [x] 1024 limit cut
 
-* more than 2 chars
+* [ ] more than 2 chars
 
-* japanese key seq mapping
+* [ ] probabilistic spelling solver
 
-* chinese duoyinzi probability
+	* japanese key seq mapping
 
-* revise word probability
+	* chinese duoyinzi
+
+* [ ] IME occurrence probability
