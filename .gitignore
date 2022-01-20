@@ -1,5 +1,6 @@
 *.log
 *.pkl
+*.png
 feeder.sh
 __pycache__
 /venv

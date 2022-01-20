@@ -4,23 +4,36 @@
 import sys
 import pickle
 import ntim
+from collections import Counter
 
 ngrams = ntim.ngrams
 input_mapper = ntim.input_mapper
+rec_ranks = []
 recsum = 0
 count = 0
+rec_ranks2 = []
 recsum2 = 0
 count2 = 0
 
 for (idx, line) in enumerate(sys.stdin):
 	if idx % 100 == 0:
-		print(idx)
+		print(idx, file = sys.stderr)
 	segs = line.split()
 	for (i, seg) in enumerate(segs):
-		# simple freq
+		count += 1
+		count2 += 1
+		rec_ranks.append(0)
+		rec_ranks2.append(0)
 		try:
-			rec_rank = 0
 			spell = ngrams[len(seg)][seg][0][0] # use first candidates only
+		except KeyError:
+			continue
+		except IndexError:
+			continue
+
+		# simple freq
+		rec_rank = 0
+		try:
 			candidates = input_mapper[spell]
 			cand_counts = [ngrams[len(candidate)][candidate][1] for candidate in candidates]
 		except KeyError:
@@ -35,8 +48,8 @@ for (idx, line) in enumerate(sys.stdin):
 		for (idx, candidate_in_count_order) in enumerate(candidates_sorted):
 			if seg == candidate_in_count_order:
 				rec_rank = 1 / (1 + idx)
+				rec_ranks[-1] = rec_rank
 		recsum += rec_rank
-		count += 1
 
 		# ngram prediction
 		rec_rank = 0
@@ -44,14 +57,27 @@ for (idx, line) in enumerate(sys.stdin):
 			buf = 's'
 		else:
 			buf = segs[i - 1][-1]
-		candidates_sorted = ntim.get_candidates(seg, buf)
-		print(candidates_sorted)
+		candidates_sorted = ntim.get_candidates(spell, buf)
 		for (idx, candidate_in_count_order) in enumerate(candidates_sorted):
 			if seg == candidate_in_count_order:
 				rec_rank = 1 / (1 + idx)
+				rec_ranks2[-1] = rec_rank
 		recsum2 += rec_rank
-		count2 += 1
 
+from matplotlib import pyplot as plt
+keys = []
+values = []
+for i, j in Counter(rec_ranks).items():
+	keys.append(i)
+	values.append(j)
+plt.plot(keys, values, label = "freq")
+keys = []
+values = []
+for i, j in Counter(rec_ranks2).items():
+	keys.append(i)
+	values.append(j)
+plt.plot(keys, values, label = "bigram")
+plt.legend()
+plt.savefig("eval.png")
 print(recsum / count, "with", count)
 print(recsum2 / count2, "with", count2)
-
