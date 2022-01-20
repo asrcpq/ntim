@@ -29,10 +29,16 @@ ntim is based on server-client mode(deamon is needed to load dictionary to RAM)
 
 * [x] reduce dict size(2+)
 
-* [ ] dict size limiter + fix probability
+* [x] dict size limiter(probability problem)
+
+* [x] partial input buffer match
+
+	* [ ] delete still match longer
+
+* [ ] evaluator
+
+* [ ] fix probability
 
 * [ ] IME occurrence probability(revise count)
-
-* [ ] partial input buffer match
 
 * [ ] probabilistic spelling solver(heteronym)

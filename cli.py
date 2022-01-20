@@ -96,7 +96,7 @@ with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as socket:
 	socket.connect("ntim.socket")
 	while True:
 		chint = stdscr.getch()
-		print(chint, file = sys.stderr)
+		#print(chint, file = sys.stderr)
 		recompute_flag = handle_input(chint)
 
 		if recompute_flag:

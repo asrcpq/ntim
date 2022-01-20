@@ -1,7 +1,7 @@
 import sys
 import pickle
 from keyseq_generator import keyseq
-from ntim import NtimData
+from ntim_data import NtimData
 
 def dict_filter(d: dict, min_keep):
 	d2 = {}
