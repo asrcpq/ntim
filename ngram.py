@@ -29,7 +29,7 @@ for n in range(1, 5):
 		line = f"s{line.strip()}" # s is start of seq
 		if len(line) <= n - 1:
 			continue
-		for i in range(len(line) - n):
+		for i in range(len(line) - n + 1):
 			key = line[i:i+n]
 			if key in ngram:
 				ngram[key][1] += 1

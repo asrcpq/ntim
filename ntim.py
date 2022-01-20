@@ -21,6 +21,7 @@ for ngram in ngrams:
 				input_mapper[lat].append(key)
 			else:
 				input_mapper[lat] = [key]
+print('ready')
 
 def bigram_query(prefix: str, ch1: str) -> float:
 	dict1 = ngrams[2]
