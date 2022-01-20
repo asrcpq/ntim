@@ -1,11 +1,21 @@
 # n-gram tiny input method(WIP)
 
-(support zh-ziranma and ja-romaji natively,
-or you need to implement your own key sequence interpreter)
-
 ## training
 
 * Send cleaned corpus(contain characters to be learned only, line by line) to `ngram.py`
+
+* `NTIM_EXACT_MAPPER` and `NTIM_CHAR_MAPPER` are 2 env files
+read by `ngram.py`
+that map key sequence to input word char by char
+(all possible combinations are used)
+or by whole string.
+
+example(exact mapper):
+
+```
+zirjma 自然码
+nyuryoku 入力
+```
 
 ## Run
 

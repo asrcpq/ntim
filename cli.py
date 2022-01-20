@@ -25,6 +25,7 @@ buffer = ""
 input_buffer = ""
 candidates = []
 page_offset = 0
+candidates_input_range = 0 # partial match
 wpp = 5
 file = open("/tmp/ntim", "w")
 
@@ -33,6 +34,7 @@ def handle_input(ch) -> bool:
 	global buffer
 	global candidates
 	global page_offset
+	global candidates_input_range
 
 	if chint == -1 or chint == 3:
 		sys.exit()
@@ -77,7 +79,8 @@ def handle_input(ch) -> bool:
 		if idx < len(candidates):
 			buffer += candidates[idx]
 			buffer = buffer[:var.max_buffer]
-			input_buffer = ""
+			input_buffer = input_buffer[candidates_input_range:]
+			candidates_input_range = 0
 			return True
 		return False
 
@@ -101,7 +104,10 @@ with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as socket:
 			if input_buffer:
 				encoded = bytes(f"{input_buffer} s{buffer}", "utf-8")
 				socket.sendall(encoded)
-				candidates = pickle.loads(socket.recv(var.msg_len))
+				new_candidates = pickle.loads(socket.recv(var.msg_len))
+				if new_candidates:
+					candidates = new_candidates
+					candidates_input_range = len(input_buffer)
 			else:
 				candidates = []
 	

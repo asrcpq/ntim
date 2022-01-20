@@ -3,12 +3,21 @@ import pickle
 from keyseq_generator import keyseq
 from ntim import NtimData
 
+def dict_filter(d: dict, min_keep):
+	d2 = {}
+	for (key, value) in d.items():
+		if value[1] >= min_keep:
+			d2[key] = value
+	return d2
+
 ntim_data = NtimData()
 ngrams = [{}]
 lines = []
 for line in sys.stdin:
 	lines.append(line)
 
+max_items = 1_000_000
+min_keep = 1
 for n in range(1, 5):
 	print(f"Processing {n}-gram")
 	ngram = {}
@@ -26,8 +35,6 @@ for n in range(1, 5):
 				ngram[key][1] += 1
 			else:
 				ks = keyseq(key)
-				if not ks and key[0] != 's':
-					continue
 				ngram[key] = [ks, 1]
 	if n == 1:
 		ntim_data.unigram_sum = sum([
@@ -38,14 +45,16 @@ for n in range(1, 5):
 			1 for i in ngram.values() if i[1] == 1
 		])
 
-	if n >= 2:
-		ngram2 = {}
-		for (key, value) in ngram.items():
-			if value[1] > 1:
-				ngram2[key] = value
-		ngrams.append(ngram2)
-	else:
-		ngrams.append(ngram)
+	ngrams.append(ngram)
+	while True:
+		counts = sum([len(ngram) for ngram in ngrams])
+		print("dict items size:", counts)
+		if counts <= max_items:
+			break
+		min_keep += 1
+		print("min keep count:", min_keep)
+		for i in range(len(ngrams)):
+			ngrams[i] = dict_filter(ngrams[i], min_keep)
 
 ntim_data.ngrams = ngrams
 

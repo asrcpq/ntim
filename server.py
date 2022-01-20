@@ -31,7 +31,7 @@ def bigram_query(prefix: str, ch1: str) -> float:
 	else:
 		c1 = dict1[str_all][1]
 		result = c1
-	print(prefix, ch1, result)
+	#print(prefix, ch1, result)
 	return result
 
 def get_candidates(input_buffer):
