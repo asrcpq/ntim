@@ -10,10 +10,11 @@ ngrams = ntim.ngrams
 input_mapper = ntim.input_mapper
 rec_ranks = []
 recsum = 0
-count = 0
+hit = 0
 rec_ranks2 = []
 recsum2 = 0
-count2 = 0
+hit2 = 0
+count = 0
 
 for (idx, line) in enumerate(sys.stdin):
 	if idx % 100 == 0:
@@ -21,7 +22,6 @@ for (idx, line) in enumerate(sys.stdin):
 	segs = line.split()
 	for (i, seg) in enumerate(segs):
 		count += 1
-		count2 += 1
 		rec_ranks.append(0)
 		rec_ranks2.append(0)
 		try:
@@ -49,6 +49,9 @@ for (idx, line) in enumerate(sys.stdin):
 			if seg == candidate_in_count_order:
 				rec_rank = 1 / (1 + idx)
 				rec_ranks[-1] = rec_rank
+				if idx < 5:
+					hit += 1
+				break
 		recsum += rec_rank
 
 		# ngram prediction
@@ -62,22 +65,25 @@ for (idx, line) in enumerate(sys.stdin):
 			if seg == candidate_in_count_order:
 				rec_rank = 1 / (1 + idx)
 				rec_ranks2[-1] = rec_rank
+				if idx < 5:
+					hit2 += 1
+				break
 		recsum2 += rec_rank
 
 from matplotlib import pyplot as plt
 keys = []
 values = []
-for i, j in Counter(rec_ranks).items():
+for i, j in sorted(Counter(rec_ranks).items(), key = lambda tup: tup[0]):
 	keys.append(i)
 	values.append(j)
 plt.plot(keys, values, label = "freq")
 keys = []
 values = []
-for i, j in Counter(rec_ranks2).items():
+for i, j in sorted(Counter(rec_ranks2).items(), key = lambda tup: tup[0]):
 	keys.append(i)
 	values.append(j)
 plt.plot(keys, values, label = "bigram")
 plt.legend()
 plt.savefig("eval.png")
-print(recsum / count, "with", count)
-print(recsum2 / count2, "with", count2)
+print(recsum / count, hit / count)
+print(recsum2 / count, hit2 / count)
