@@ -42,3 +42,5 @@ ntim is based on server-client mode(deamon is needed to load dictionary to RAM)
 * [ ] IME occurrence probability(revise count)
 
 * [ ] probabilistic spelling solver(heteronym)
+
+* [ ] merge ntim data

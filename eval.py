@@ -15,6 +15,7 @@ rec_ranks2 = []
 recsum2 = 0
 hit2 = 0
 count = 0
+hitn = 1
 
 for (idx, line) in enumerate(sys.stdin):
 	if idx % 100 == 0:
@@ -49,7 +50,7 @@ for (idx, line) in enumerate(sys.stdin):
 			if seg == candidate_in_count_order:
 				rec_rank = 1 / (1 + idx)
 				rec_ranks[-1] = rec_rank
-				if idx < 5:
+				if idx < hitn:
 					hit += 1
 				break
 		recsum += rec_rank
@@ -65,7 +66,7 @@ for (idx, line) in enumerate(sys.stdin):
 			if seg == candidate_in_count_order:
 				rec_rank = 1 / (1 + idx)
 				rec_ranks2[-1] = rec_rank
-				if idx < 5:
+				if idx < hitn:
 					hit2 += 1
 				break
 		recsum2 += rec_rank

@@ -1,0 +1,7 @@
+#!/bin/bash
+cd "$(dirname "$0")/.."
+if [ "$1" = "server" ]; then
+	python3 server.py
+elif [ "$1" = "client" ]; then
+	python3 cli.py && cat /tmp/ntim | xsel -i -b
+fi
