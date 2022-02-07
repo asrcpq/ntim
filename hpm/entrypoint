@@ -1,7 +1,13 @@
 #!/bin/bash
+set -e
 cd "$(dirname "$0")/.."
 if [ "$1" = "server" ]; then
+	if [ -S "ntim.socket" ]; then
+		rm ntim.socket
+	fi
 	python3 server.py
 elif [ "$1" = "client" ]; then
-	python3 cli.py && cat /tmp/ntim | xsel -i -b
+	python3 cli.py
+	cat /tmp/ntim | xsel -i -b
+	sleep 0.1
 fi
